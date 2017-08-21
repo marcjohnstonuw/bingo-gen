@@ -1,7 +1,7 @@
 const knex = require('knex')({
   client: 'postgres',
-  connection: {
-    host     : 'ec2-184-73-249-56.compute-1.amazonaws.com',
+  connection: process.env.DATABASE_URL || {
+    host     : 'localhost',
     user     : 'postgres',
     password : 'postgres',
     database : 'bingo-generator',
