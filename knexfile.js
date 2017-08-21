@@ -2,8 +2,6 @@
 module.exports = {
   client: 'pg',
   connection: process.env.DATABASE_URL || {
-    user: 'postgres', // or other user if you made one
-    password: 'postgres',
-    database: 'bingo-generator'
+    host: 'ec2-184-73-249-56.compute-1.amazonaws.com'
   }
 };
