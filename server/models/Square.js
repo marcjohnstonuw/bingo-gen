@@ -1,4 +1,4 @@
-const bookshelf = require('../bookshelf');
+const bookshelf = require('../Bookshelf');
 const GameType = require('./GameType');
 const Square = bookshelf.Model.extend({
     tableName: 'square', // what you named your table as

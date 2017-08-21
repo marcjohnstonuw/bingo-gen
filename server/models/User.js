@@ -1,4 +1,4 @@
-const bookshelf = require('../bookshelf');
+const bookshelf = require('../Bookshelf');
 const User = bookshelf.Model.extend({
     tableName: 'user', // what you named your table as
     boards: function () {

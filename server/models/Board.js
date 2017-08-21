@@ -1,4 +1,4 @@
-const bookshelf = require('../bookshelf');
+const bookshelf = require('../Bookshelf');
 const Square = require('./Square');
 const BoardSquare = require('./BoardSquare');
 const GameType = require('./GameType')
