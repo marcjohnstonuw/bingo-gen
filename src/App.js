@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router';
 import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 
 class App extends Component {
@@ -26,6 +27,8 @@ class App extends Component {
       this.props.route.auth.auth0.client.userInfo(accessToken, (err, profile) => {
         if (profile) {
           this.setState({user: profile});
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+          axios.post('/users/', profile);
         }
       });
     }
@@ -40,7 +43,6 @@ class App extends Component {
   }
 
   componentWillMount () {
-
     this.getProfile();
   }
 
@@ -63,7 +65,7 @@ class App extends Component {
           </ul>
         </div>
         <p className="App-intro">
-          {React.cloneElement(this.props.children, {getProfile: this.getProfile})}
+          {React.cloneElement(this.props.children, {getProfile: this.getProfile, auth: this.props.route.auth})}
         </p>
       </div>
     );

@@ -37,13 +37,12 @@ app.use(function(req, res, next) {
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
-app.use(checkJwt);
 
-app.use('/gameTypes', checkJwt, GameTypeRoutes);
-app.use('/squares', checkJwt, SquaresRoutes);
-app.use('/users', checkJwt, UsersRoutes);
-app.use('/boards', checkJwt, BoardRoutes);
-app.use('/boardsquares', checkJwt, BoardSquareRoutes);
+app.use('/gameTypes', GameTypeRoutes);
+app.use('/squares', SquaresRoutes);
+app.use('/users', UsersRoutes);
+app.use('/boards', BoardRoutes);
+app.use('/boardsquares', BoardSquareRoutes);
 
 
 

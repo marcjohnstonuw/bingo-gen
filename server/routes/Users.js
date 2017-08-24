@@ -14,14 +14,31 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const newUser = new User(req.body);
-    newUser.save()
-        .then((result) => {
-            res.json(result)
-        })
-        .catch((err) => {
-            res.status(500).json(err)
-        });
+    console.log('users post', req.body)
+    User.query({where: {email: req.body.email}})
+    .fetch()
+    .then((user) => {
+        console.log('user', user);
+        if (user) {
+            // party?
+            console.log('got it already')
+            res.json(user);
+        } else {
+            const newUser = new User({
+                email: req.body.email,
+                firstName: req.body.given_name,
+                lastName: req.body.family_name
+            });
+            newUser.save()
+                .then((result) => {
+                    res.json(result)
+                })
+                .catch((err) => {
+                    console.log(err)
+                    res.status(500).json(err)
+                });
+        }
+    })
 })
             
 router.put('/:userID', (req, res) => {

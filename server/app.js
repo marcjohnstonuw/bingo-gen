@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const bookshelf = require('./Bookshelf');
 const bodyParser = require('body-parser');
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+const jwks = require('jwks-rsa');
 // const cookieParser = require('cookie-parser');
 const GameTypeRoutes = require('./routes/GameTypes');
 const SquaresRoutes = require('./routes/Squares');
@@ -18,6 +21,18 @@ app.use(function(req, res, next) {
   next();
 });
 
+var jwtCheck = jwt({
+    secret: jwks.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: "https://marcjohnstonuw.auth0.com/.well-known/jwks.json"
+    }),
+    audience: 'https://bingo-gen.api.com',
+    issuer: "https://marcjohnstonuw.auth0.com/",
+    algorithms: ['RS256']
+});
+
 // Serve static assets
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
@@ -29,11 +44,11 @@ app.get('/', (req, res) => {
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-app.use('/gameTypes', GameTypeRoutes);
-app.use('/squares', SquaresRoutes);
-app.use('/users', UsersRoutes);
-app.use('/boards', BoardRoutes);
-app.use('/boardsquares', BoardSquareRoutes);
+app.use('/gameTypes', jwtCheck, GameTypeRoutes);
+app.use('/squares', jwtCheck, SquaresRoutes);
+app.use('/users', jwtCheck, UsersRoutes);
+app.use('/boards', jwtCheck, BoardRoutes);
+app.use('/boardsquares', jwtCheck, BoardSquareRoutes);
 
 
 module.exports = app;
