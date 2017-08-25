@@ -54,6 +54,7 @@ app.use(function (req, res, next) {
 //var decoded = jwt_decode(token);
 
 // Serve static assets
+console.log('__dirname', __dirname)
 app.use(express.static(path.resolve(__dirname, 'build')));
 
 // Always return the main index.html, so react-router render the route in the client
