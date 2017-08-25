@@ -5,8 +5,10 @@ const Square = require('../models/Square');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-    console.log(JSON.stringify(req.params))
+    console.log('req.headers.email', req.headers.userID)
+    // if (!req.header.email)
     Board
+        .query({where: {userID: req.headers.userID}})
         .fetchAll({
             withRelated: ['gameType', 'boardSquares']
         })
@@ -44,7 +46,7 @@ router.get('/:boardID', (req, res) => {
 
 router.post('/:gameTypeID', (req, res) => {
     const newBoard = new Board ({
-        userID: 5,
+        userID: req.headers.userID,
         gameTypeID: req.params.gameTypeID
     });
     newBoard.save()

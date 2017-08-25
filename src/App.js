@@ -20,14 +20,20 @@ class App extends Component {
     const accessToken = localStorage.getItem('access_token');
     return accessToken;
   }
+  getIdToken() {
+    const idToken = localStorage.getItem('id_token');
+    return idToken;
+  }
 
-  getProfile(token) {
-    let accessToken = token || this.getAccessToken();
+  getProfile(_accessToken, _idToken) {
+    let accessToken = _accessToken || this.getAccessToken();
+    let idToken = _idToken || this.getIdToken();
     if (accessToken) {
       this.props.route.auth.auth0.client.userInfo(accessToken, (err, profile) => {
         if (profile) {
           this.setState({user: profile});
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+          axios.defaults.headers.common['id'] = idToken;
           axios.post('/users/', profile);
         }
       });
@@ -58,8 +64,9 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
           <ul>
-          <li><Link style={{color:'white'}} to="/GameTypes">Templates</Link></li>
+          <li><Link style={{color:'white'}} to="/">Templates</Link></li>
           <li><Link style={{color:'white'}} to="/Boards">Boards</Link></li>
+          <li><Link style={{color:'white'}} to="/Callback">Callback</Link></li>
           { userData }
           { loginButton }
           </ul>

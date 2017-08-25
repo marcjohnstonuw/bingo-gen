@@ -1,22 +1,14 @@
 import React, { Component } from 'react';
 
 class Callback extends Component {
+    componentDidMount () {
+        this.props.auth.handleAuthentication(this.props.getProfile);
+    }
     render() {
-        const style = {
-            position: 'absolute',
-            display: 'flex',
-            justifyContent: 'center',
-            height: '100vh',
-            width: '100vw',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: 'white',
-        }
+        console.log('called back')
 
         return (
-            <div style={style}>
+            <div>boring...
             </div>
         );
     }

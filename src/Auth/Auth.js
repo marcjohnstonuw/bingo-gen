@@ -25,12 +25,11 @@ export default class Auth {
     }
 
     handleAuthentication(cb) {
-        let self = this;
         this.auth0.parseHash((err, authResult) => {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 this.setSession(authResult);
                 browserHistory.push('/')
-                cb(authResult.accessToken);
+                cb(authResult.accessToken, authResult.idToken);
             } else if (err) {
                 browserHistory.push('/')
                 console.log(err);

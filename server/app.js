@@ -5,12 +5,14 @@ const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const jwks = require('jwks-rsa');
+const jwt_decode = require('jwt-decode');
 // const cookieParser = require('cookie-parser');
 const GameTypeRoutes = require('./routes/GameTypes');
 const SquaresRoutes = require('./routes/Squares');
 const UsersRoutes = require('./routes/Users');
 const BoardRoutes = require('./routes/Board');
 const BoardSquareRoutes = require('./routes/BoardSquare');
+const User = require('./models/User');
 const path = require('path');
 
 
@@ -33,6 +35,24 @@ var jwtCheck = jwt({
     algorithms: ['RS256']
 });
 
+app.use(function (req, res, next) {
+  if (req.headers.id) {
+    let decoded = jwt_decode(req.headers.id);
+    User.query({where: {email: decoded.email}})
+      .fetch()
+      .then((user) => {
+        req.headers.userID = user.id
+        next();
+      })
+      .catch((err) => {
+        next();
+      })
+  } else {
+    next()
+  }
+})
+//var decoded = jwt_decode(token);
+
 // Serve static assets
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
@@ -44,7 +64,7 @@ app.get('/', (req, res) => {
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-app.use('/gameTypes', jwtCheck, GameTypeRoutes);
+app.use('/gameTypes', GameTypeRoutes);
 app.use('/squares', jwtCheck, SquaresRoutes);
 app.use('/users', jwtCheck, UsersRoutes);
 app.use('/boards', jwtCheck, BoardRoutes);
